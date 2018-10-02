@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:logs/logs.dart';
@@ -74,24 +72,20 @@ class _XFactorPageState extends State<XFactorPage> {
           final List<Wod> updated = await wodManager.retrieveWods();
 
           // TODO: remove these log statements
-          updated.forEach(
-            (wod) => logData('x-factor', wod, toEncodable: (obj) {
-                  Wod wod = obj;
-                  return {
+          if (updated.isNotEmpty) {
+            Wod wod = updated.first;
+            log.log(
+              () => wod.toString(),
+              data: () => {
                     'title': wod.title,
                     'description': wod.description,
                     'date': wod.date,
                     'category': wod.category,
                     'url': wod.url,
-                  };
-                }),
-          );
-          logError(
-            'x-factor',
-            context.toString(),
-            stackTrace: StackTrace.current,
-          );
-          log.log(() => updated.first.toString());
+                  },
+            );
+            log.log(() => wod.toString());
+          }
 
           setState(() {
             wods = updated;
@@ -183,24 +177,4 @@ class WodWidget extends StatelessWidget {
       ),
     );
   }
-}
-
-void logData(
-  String channelName,
-  Object data, {
-  String summary,
-  Object toEncodable(Object nonEncodable),
-}) {
-  summary ??= data.toString();
-  final String encoded = jsonEncode(data, toEncodable: toEncodable);
-  developer.log(summary, name: channelName, error: encoded);
-}
-
-void logError(String channelName, String message, {StackTrace stackTrace}) {
-  developer.log(
-    message,
-    name: channelName,
-    stackTrace: stackTrace,
-    level: 1000,
-  );
 }

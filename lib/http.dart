@@ -1,16 +1,13 @@
-import 'dart:developer' as developer;
 import 'dart:io';
 
-import 'logging.dart';
+import 'package:logs/logs.dart';
 
 Log _log = new Log('http');
 
 final _HttpOverrides _httpOverrides = new _HttpOverrides();
 
 void installHttpLogger() {
-  //if (!_log.isEnabled) {
-  _log.enable();
-  //}
+  _log.enabled = true;
 
   HttpOverrides.global = _httpOverrides;
 }
@@ -115,15 +112,11 @@ class LoggingHttpClient implements HttpClient {
 
   @override
   Future<HttpClientRequest> get(String host, int port, String path) {
-    print('get');
-    _log.log('getUrl: $host');
     return proxy.get(host, port, path);
   }
 
   @override
   Future<HttpClientRequest> getUrl(Uri url) {
-    print('getUrl');
-    _log.log('getUrl: $url');
     return proxy.getUrl(url);
   }
 
@@ -153,18 +146,22 @@ class LoggingHttpClient implements HttpClient {
     final int id = count++;
 
     // http.open #123 uri GET
-    developer.log('#$id $url open', name: 'http.${method.toLowerCase()}');
-    //_log.log('openUrl: $url $method');
+    _log.log(() => '#$id • $method • $url open');
 
     Future<HttpClientRequest> request = proxy.openUrl(method, url);
     return request.then((HttpClientRequest req) {
       //_log.log('openUrl: $url request ready');
-      developer.log('#$id $url ready', name: 'http.${method.toLowerCase()}');
+      _log.log(
+        () => '#$id • $method • $url ready',
+        data: () => _headersToMap(req.headers),
+      );
 
       req.done.then((HttpClientResponse response) {
-        developer.log(
-            '#$id $url ${response.statusCode} ${response.reasonPhrase} ${response.contentLength} bytes',
-            name: 'http.${method.toLowerCase()}');
+        _log.log(
+          () => '#$id • $method • $url ${response.statusCode} '
+              '${response.reasonPhrase} ${response.contentLength} bytes',
+          data: () => _headersToMap(response.headers),
+        );
       });
 
       return req;
@@ -205,5 +202,15 @@ class LoggingHttpClient implements HttpClient {
   Future<HttpClientRequest> putUrl(Uri url) {
     print('putUrl');
     return proxy.putUrl(url);
+  }
+
+  Map _headersToMap(HttpHeaders headers) {
+    Map<String, String> result = {};
+
+    headers.forEach((String key, List<String> values) {
+      result[key] = values.join(',');
+    });
+
+    return result;
   }
 }

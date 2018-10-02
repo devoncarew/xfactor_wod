@@ -23,7 +23,7 @@ class Wod {
 }
 
 class WodManager {
-  static const String prefix = 'CrossFit X Factor – ';
+  static const String gymPrefix = 'CrossFit X Factor – ';
 
   http.Client client;
 
@@ -57,9 +57,14 @@ class WodManager {
 
       String description = p.text.trim();
 
-      if (description.startsWith(prefix)) {
-        description = description.substring(prefix.length).trim();
+      if (description.startsWith(gymPrefix)) {
+        description = description.substring(gymPrefix.length).trim();
       }
+
+      description = description
+          .split(gymPrefix)
+          .map((String str) => str.trim())
+          .join(('\n\n'));
 
       return new Wod(
         title: a.text.trim(),

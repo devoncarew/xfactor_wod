@@ -15,18 +15,9 @@ dependencies:
     git: https://github.com/pq/logs
   url_launcher: ^3.0.0
 
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-
-dependency_overrides:
-  logs:
-    path: /Users/devoncarew/projects/pq/logs
-
 # The following section is specific to Flutter.
 flutter:
   uses-material-design: true
-
   assets:
-   - assets/logo_dark.png
-   - assets/logo_light.png
+  - assets/logo_dark.png
+  - assets/logo_light.png
