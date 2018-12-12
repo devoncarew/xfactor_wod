@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'http.dart';
 import 'model.dart';
 
-final Log /*!*/ log = new Log('x-factor');
+final Log log = new Log('x-factor');
 
 void main() {
   log.enabled = true;
@@ -21,7 +21,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   @override
-  Widget build(BuildContext /*!*/ context) {
+  Widget build(BuildContext context) {
     return new MaterialApp(
       title: 'Crossfit X-Factor',
       theme: new ThemeData(
@@ -46,34 +46,34 @@ class MyApp extends StatelessWidget {
 }
 
 class XFactorPage extends StatefulWidget {
-  XFactorPage({Key /*!*/ key, this.title}) : super(key: key);
+  XFactorPage({Key key, this.title}) : super(key: key);
 
-  final String /*?*/ title;
+  final String title;
 
   @override
   _XFactorPageState createState() => new _XFactorPageState();
 }
 
 class _XFactorPageState extends State<XFactorPage> {
-  final GlobalKey /*!*/ <RefreshIndicatorState> indicatorKey =
+  final GlobalKey<RefreshIndicatorState> indicatorKey =
       new GlobalKey<RefreshIndicatorState>();
 
   final WodManager wodManager = new WodManager();
 
-  List /*?*/ <Wod> wods = [];
-  bool /*?*/ inited = false;
+  List<Wod> wods = [];
+  bool inited = false;
 
   @override
-  Widget build(BuildContext /*!*/ context) {
-    final RefreshIndicator /*!*/ indicator = new RefreshIndicator(
+  Widget build(BuildContext context) {
+    final RefreshIndicator indicator = new RefreshIndicator(
       key: indicatorKey,
       onRefresh: () async {
         try {
-          final List /*!*/ <Wod> updated = await wodManager.retrieveWods();
+          final List<Wod> updated = await wodManager.retrieveWods();
 
           // TODO: remove these log statements
           if (updated.isNotEmpty) {
-            Wod /*!*/ wod = updated.first;
+            Wod wod = updated.first;
             log.log(
               wod.toString(),
               data: {
@@ -102,8 +102,8 @@ class _XFactorPageState extends State<XFactorPage> {
         padding: EdgeInsets.symmetric(vertical: 8.0),
         physics: const AlwaysScrollableScrollPhysics(),
         itemCount: wods.length,
-        itemBuilder: (BuildContext /*!*/ context, int /*!*/ index) {
-          final Wod /*?*/ wod = wods[index];
+        itemBuilder: (BuildContext context, int index) {
+          final Wod wod = wods[index];
           return new WodWidget(wod);
         },
       ),
@@ -121,17 +121,17 @@ class _XFactorPageState extends State<XFactorPage> {
 }
 
 class WodWidget extends StatelessWidget {
-  static const TextStyle /*!*/ titleStyle = const TextStyle(
+  static const TextStyle titleStyle = const TextStyle(
     fontWeight: FontWeight.bold,
     fontSize: 16.0,
   );
 
   WodWidget(this.wod);
 
-  final Wod /*?*/ wod;
+  final Wod wod;
 
   @override
-  Widget build(BuildContext /*!*/ context) {
+  Widget build(BuildContext context) {
     return new Padding(
       padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 12.0),
       child: GestureDetector(
@@ -169,7 +169,7 @@ class WodWidget extends StatelessWidget {
     }
   }
 
-  Widget spacer(double /*!*/ size) {
+  Widget spacer(double size) {
     return new Padding(
       padding: EdgeInsets.symmetric(
         vertical: size,
