@@ -75,16 +75,16 @@ class _XFactorPageState extends State<XFactorPage> {
           if (updated.isNotEmpty) {
             Wod wod = updated.first;
             log.log(
-              () => wod.toString(),
-              data: () => {
-                    'title': wod.title,
-                    'description': wod.description,
-                    'date': wod.date,
-                    'category': wod.category,
-                    'url': wod.url,
-                  },
+              wod.toString(),
+              data: {
+                'title': wod.title,
+                'description': wod.description,
+                'date': wod.date,
+                'category': wod.category,
+                'url': wod.url,
+              },
             );
-            log.log(() => wod.toString());
+            log.log(wod.toString());
           }
 
           setState(() {
