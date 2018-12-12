@@ -146,21 +146,21 @@ class LoggingHttpClient implements HttpClient {
     final int id = count++;
 
     // http.open #123 uri GET
-    _log.log(() => '#$id • $method • $url open');
+    _log.log('#$id • $method • $url open');
 
     Future<HttpClientRequest> request = proxy.openUrl(method, url);
     return request.then((HttpClientRequest req) {
       //_log.log('openUrl: $url request ready');
       _log.log(
-        () => '#$id • $method • $url ready',
-        data: () => _headersToMap(req.headers),
+        '#$id • $method • $url ready',
+        data: _headersToMap(req.headers),
       );
 
       req.done.then((HttpClientResponse response) {
         _log.log(
-          () => '#$id • $method • $url ${response.statusCode} '
+          '#$id • $method • $url ${response.statusCode} '
               '${response.reasonPhrase} ${response.contentLength} bytes',
-          data: () => _headersToMap(response.headers),
+          data: _headersToMap(response.headers),
         );
       });
 
